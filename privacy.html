@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Privacidad · MyFinance</title>
+    <meta name="description" content="Política de privacidad de MyFinance.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Navegación principal">
+        <a class="brand" href="index.html">MyFinance</a>
+        <div class="links">
+          <a href="privacy.html" aria-current="page">Privacidad</a>
+          <a href="terms.html">Condiciones</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="document">
+      <h1>Política de privacidad</h1>
+      <p class="muted">Última actualización: 29 de septiembre de 2026.</p>
+
+      <section>
+        <h2>Alcance</h2>
+        <p>
+          MyFinance es una herramienta personal para registrar gastos y salidas de dinero a partir de avisos
+          recibidos en Gmail. Está diseñada para uso del propietario en su propio servidor privado y no se ofrece
+          como servicio público para terceros.
+        </p>
+      </section>
+
+      <section>
+        <h2>Acceso a Gmail</h2>
+        <p>
+          La aplicación accede a Gmail mediante OAuth de Google y solicita el permiso de solo lectura
+          <code>https://www.googleapis.com/auth/gmail.readonly</code>. Con este permiso, MyFinance puede leer
+          mensajes autorizados, pero no puede enviar correos, borrar mensajes, modificar etiquetas ni marcar
+          mensajes como leídos.
+        </p>
+        <p>
+          La implementación usa la API de Gmail para listar mensajes que coinciden con la consulta configurada y
+          obtener mensajes individuales en formato raw. También puede usar el historial de Gmail para continuar
+          sincronizaciones incrementales desde un checkpoint.
+        </p>
+      </section>
+
+      <section>
+        <h2>Datos procesados y almacenados</h2>
+        <p>
+          MyFinance procesa correos de aviso financiero configurados por el propietario, por ejemplo avisos de
+          bancos o tarjetas. Puede almacenar datos del mensaje original como proveedor, identificador de Gmail,
+          remitente, asunto, fecha de recepción, hash, cuerpo de texto o HTML, estado de procesamiento y ruta de
+          origen.
+        </p>
+        <p>
+          A partir de esos avisos se guardan movimientos financieros, incluyendo institución, método de pago,
+          últimos cuatro dígitos de tarjeta cuando existen, comercio o destinatario, descripción original,
+          importe, moneda, tipo de evento, referencia, fecha de operación cuando el aviso la informa, fecha de
+          recepción, estado de revisión, categoría, clasificación manual de transferencias y payload extraído.
+        </p>
+        <p>
+          También se almacenan configuraciones operativas como categorías, reglas, instrumentos de pago,
+          checkpoints de sincronización, eventos de auditoría y el token OAuth necesario para renovar el acceso
+          autorizado. Los secretos OAuth y tokens se mantienen fuera del repositorio de código.
+        </p>
+      </section>
+
+      <section>
+        <h2>Finalidad</h2>
+        <p>
+          Los datos se usan para registrar movimientos, evitar duplicados, mostrar totales, permitir revisión
+          manual, reprocesar mensajes cuando cambian los parsers y mantener continuidad de la sincronización.
+          MyFinance no usa los datos de Gmail para publicidad, venta de datos, investigación de mercado ni
+          perfiles ajenos a la funcionalidad financiera personal.
+        </p>
+        <p>
+          El uso y la transferencia a cualquier otra aplicación de información recibida desde APIs de Google
+          deben adherir a la Política de Datos de Usuario de los Servicios API de Google, incluidos los requisitos
+          de uso limitado.
+        </p>
+      </section>
+
+      <section>
+        <h2>Almacenamiento</h2>
+        <p>
+          La información se almacena en una base de datos y volúmenes del servidor privado del propietario. La
+          configuración de producción prevista usa PostgreSQL, una interfaz web privada con autenticación y
+          backups administrados por el propietario. Los backups pueden contener movimientos financieros,
+          fragmentos de correos y, si se respaldan por separado, tokens OAuth.
+        </p>
+      </section>
+
+      <section>
+        <h2>Retención y eliminación</h2>
+        <p>
+          Los movimientos y metadatos se conservan mientras el propietario mantenga la instalación y la base de
+          datos. La aplicación incluye una tarea para purgar cuerpos de correos procesados más antiguos que el
+          valor configurado en <code>RETENTION_BODY_DAYS</code>; esto elimina el texto y HTML almacenados del
+          mensaje, pero no necesariamente elimina movimientos, referencias, auditoría o metadatos necesarios para
+          la contabilidad y la idempotencia.
+        </p>
+        <p>
+          La eliminación completa de datos requiere acciones administrativas del propietario sobre la base de datos,
+          backups y archivos de token. MyFinance no define por sí misma un plazo automático general de borrado para
+          todos los datos.
+        </p>
+      </section>
+
+      <section>
+        <h2>Revocación del acceso</h2>
+        <p>
+          El acceso a Gmail puede revocarse desde la cuenta de Google, en la sección de aplicaciones con acceso a la
+          cuenta. También puede eliminarse el token OAuth almacenado en el servidor. Al revocar o eliminar el token,
+          MyFinance deja de poder sincronizar nuevos mensajes hasta que el propietario autorice nuevamente el acceso.
+          La revocación no elimina automáticamente los datos ya almacenados en la base de datos o backups.
+        </p>
+      </section>
+
+      <section>
+        <h2>Limitaciones</h2>
+        <p>
+          MyFinance solo registra avisos recibidos y reconocidos por sus parsers. Puede omitir compras que no generen
+          correo, avisos con formatos no soportados, datos incompletos, devoluciones, anulaciones, cuotas u otros
+          casos aún no implementados. Los totales son auxiliares y no sustituyen estados de cuenta, saldos oficiales
+          ni comprobantes bancarios.
+        </p>
+      </section>
+
+      <section>
+        <h2>Independencia</h2>
+        <p>
+          MyFinance no está afiliada, patrocinada ni respaldada por Google, Gmail, Itaú, Santander, Scotiabank,
+          Edenred ni ninguna otra institución financiera. Las marcas pertenecen a sus respectivos titulares.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p><a href="index.html">Inicio</a> · <a href="terms.html">Condiciones de uso</a></p>
+    </footer>
+  </body>
+</html>
